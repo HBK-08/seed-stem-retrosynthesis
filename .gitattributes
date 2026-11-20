@@ -1,5 +1,3 @@
-baseline/*.smi text eol=lf
-baseline/search.yml text eol=lf
 reproduction/fig4a/targets.smi -text
 *.pkl binary
 *.png binary

@@ -7,35 +7,20 @@
 | 想做什么 | 从哪里开始 |
 | --- | --- |
 | 查看或复跑论文图 4a 的第 1 题 | [单题复现](reproduction/fig4a/README.md)包含 CPU 环境入口、原始目标与库存来源、30 分钟 MCTS 配置和复跑命令。[运行结果](reproduction/fig4a/runs/target-000/result.json)与[搜索图复核](reproduction/fig4a/runs/target-000/audit.json)可直接查看。 |
-| 验证本机模型部署 | [两题开发基线](baseline/README.md)给出权重和依赖安装方法，用阿司匹林、布洛芬和 16 项库存检查 Retro* 搜索。[实测记录](baseline/RESULTS.md) |
-| 从结构图练习比赛流程 | 按[练习题面](practice/01/prompt.md)读图，用[结构绘制脚本](tools/draw_structure.py)检查转录，再用[单题工作稿](practice/route-template.md)整理路线和证据。 |
+| 查模型部署成本 | [部署调研](docs/model-deployment.md)汇总 RetroChimera、Solvent 和 DianShi 的公开权重体积及环境要求。 |
+| 整理比赛方案 | 用[通用单题工作稿](practice/route-template.md)记录目标、候选路线、反应先例、选择性与风险。[结构绘制工具](tools/draw_structure.py)可把 SMILES 画回结构图，供人工核对。 |
 
 当前正式基准跑了原始 172 道题中的第 1 题。使用 23,081,629 项库存，在本机 CPU 上搜索 30 分钟，生成 43,086 个节点，未找到完整路线。50 个首步候选中只有 2 个得到后续展开。[实验设置、分时结果与局限](reproduction/fig4a/README.md)
 
-## 比赛与第一次演练
+## 比赛准备
 
 赛题从目标分子结构图开始，要求在火山方舟设计完整逆合成路线。2026 年 12 月 4 日中午 12:00 截止报名，12 月 7 日公布题目及提交要求，12 月 10 日提交方案。专家初筛之后，独立 CRO 会对入选方案做湿实验。[赛事通知](https://seed.bytedance.com/zh/blog/seed-stem-计划-分子逆合成挑战赛启动?view_from=homepage_tab) · [报名入口](https://bytedance.larkoffice.com/share/base/form/shrcnPuqeyluTnYwI7SnjBqL4Be)
 
-1. 打开[练习题面](practice/01/prompt.md)，把其中的目标图和问题发给方舟。在同一轮中保留模型读出的结构和首次提出的路线，便于追溯错误来自读图还是推理。
-2. 核对模型读出的 SMILES。可以用下方脚本重画结构，逐处比较支链、取代位置和立体标记。读错结构时保留原回答，纠正后再生成一次路线。
-3. 打开[参考路线与专利核查](practice/01/reference.md)。若模型提出其他断键，按它实际提出的反应查证；只要能到达同一目标，替代路线也可以成立。
-4. 用[单题工作稿](practice/route-template.md)记录采纳的路线和证据。保留方舟模型名、日期和原回答，后面更换提示词时可对照。本地已有参考解，方舟作答及耗时待实测。
-
-### 重画模型识别出的结构
-
-在装有 RDKit 的 Python 环境中，从仓库根目录运行以下命令。输出包括结构图、规范 SMILES、分子式和潜在四面体手性中心；手性中心编号从 0 开始，问号表示输入没有指定构型。图像转录仍需对照原图。
-
-```powershell
-python tools/draw_structure.py "CC(O)c1ccccc1" preview.png
-```
-
 ## 出题前安排
-
-方舟读图练习用作端到端对照。单独测试规划器时直接输入已核对的目标 SMILES，以便定位误差。11 月 19 日的本地开发测试中，阿司匹林首轮展开得到文献路线，布洛芬在 12 次调用内未闭合。[两题实测结果与失败节点](baseline/RESULTS.md)
 
 | 时段 | 要解决的问题 | 可检查的产物 |
 | --- | --- | --- |
-| 11 月 19–23 日 | 强基线能否找到完整路线，运行一次要多少资源？ | 在有公开路线的目标上运行 [RetroChimera + Syntheseus 基线](baseline/README.md)，记录库存、预算、搜索图和用时，并核算 Solvent、DianShi 部署成本 |
+| 11 月 19–23 日 | 强基线能否找到完整路线，运行一次要多少资源？ | 在 [SimpRetro 原始目标](reproduction/fig4a/README.md)上运行 RetroChimera + Syntheseus，记录库存、预算、搜索图和用时 |
 | 11 月 24–27 日 | 关键前体是否出现、是否展开、叶节点为何未闭合、闭合路线的关键步有何依据？ | 针对具体节点回查单步候选、搜索图、库存和文献，保留替代路线及无法判定的案例 |
 | 11 月 28 日–12 月 3 日 | 哪个干预能解决已观察到的问题？ | 按归因选择先例检索、路线评分或失败节点重搜。冻结目标、库存和预算，逐项消融，只保留有可重复收益的模块 |
 | 12 月 4–6 日 | 三天能否完成十道高难题的搜索、证据核查和方案整理？ | 用未参与调参的十道题限时演练，逐题记录首条候选时间、人工核查用时、可交付方案及未解决风险 |

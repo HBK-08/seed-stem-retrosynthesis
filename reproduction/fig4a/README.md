@@ -32,7 +32,23 @@
 
 ## 复跑
 
-从项目根目录执行。先按[环境与权重说明](../../baseline/README.md)准备 Python 和 Pistachio 权重。以下命令在 Bash 中运行，库存索引只需建立一次。目标清单已随仓库保存，运行器会核对原始文件 SHA-256。
+从项目根目录在 Linux 或 WSL 的 Bash 中运行。首次安装需要 Python 3.10 和 uv。本机使用 CPU 版 PyTorch 2.2.2、RetroChimera 1.3.0 和 Syntheseus 0.9.0。[CPU 依赖](requirements-cpu.txt) · [本地环境包版本记录](packages-cpu.txt)
+
+```bash
+mkdir -p .runtime-linux
+uv venv --python python3.10 .runtime-linux/venv
+uv pip install --python .runtime-linux/venv/bin/python torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cpu
+uv pip install --python .runtime-linux/venv/bin/python -r reproduction/fig4a/requirements-cpu.txt --find-links https://data.pyg.org/whl/torch-2.2.0+cpu.html
+```
+
+从[官方 Figshare 文件](https://api.figshare.com/v2/file/download/59468882)下载 Pistachio 权重，核验后解压到配置中的模型目录。
+
+```bash
+curl -fL 'https://api.figshare.com/v2/file/download/59468882' -o .runtime-linux/retrochimera_pistachio.zip
+echo 'b0d30506d780693b293991cf2e5c5ac0be773748ccddbcd46684de5696d8a60f  .runtime-linux/retrochimera_pistachio.zip' | sha256sum -c - && unzip -q .runtime-linux/retrochimera_pistachio.zip -d .runtime-linux/pistachio
+```
+
+库存索引只需建立一次。目标清单已随仓库保存，运行器会核对原始文件 SHA-256。
 
 ```bash
 curl -fL 'https://drive.usercontent.google.com/download?id=1x33LmAizIdA5Dgw7IJp7_k7gRdNVv5cT&export=download&confirm=t' -o .runtime-linux/emolecules.txt
