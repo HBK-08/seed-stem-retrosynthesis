@@ -1,3 +1,3 @@
-reproduction/fig4a/targets.smi -text
+data/simpretro/targets.smi -text
 *.pkl binary
 *.png binary

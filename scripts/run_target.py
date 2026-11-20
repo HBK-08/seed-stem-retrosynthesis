@@ -23,7 +23,7 @@ from syntheseus.search.analysis.solution_time import get_first_solution_time
 from syntheseus.search.mol_inventory import BaseMolInventory
 from prepare_stock import STOCK_SHA256
 
-HERE = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 MINUTES = (1, 2, 5, 10, 30)
 TARGETS_SHA256 = "2803ed381b5908d785333231263f78dd4ef673ed00c13dd675f01d1f07f34683"
 
@@ -79,14 +79,14 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--index", type=int, default=0, help="zero-based index in original target file")
     args = parser.parse_args()
-    raw = (HERE / "targets.smi").read_bytes()
+    raw = (ROOT / "data" / "simpretro" / "targets.smi").read_bytes()
     if hashlib.sha256(raw).hexdigest() != TARGETS_SHA256:
         raise ValueError("Target file differs from the pinned author release.")
     targets = raw.decode("ascii").splitlines()
     if not 0 <= args.index < len(targets):
         parser.error("Target index out of range")
     target = Molecule(targets[args.index])
-    cfg = get_config(["--config", str(HERE / "search.yml")], SearchConfig)
+    cfg = get_config(["--config", str(ROOT / "configs" / "fig4a.yml")], SearchConfig)
     stock = Stock(args.stock)
     source = dict(stock.db.execute("SELECT * FROM source").fetchone())
     if source["sha256"] != STOCK_SHA256:

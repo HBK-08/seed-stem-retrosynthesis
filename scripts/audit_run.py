@@ -22,7 +22,7 @@ def audit(run, db):
     assert graph.root_mol.smiles == inputs["canonical_smiles"]
     assert len(graph) == result["graph_nodes"]
     assert db.execute("SELECT sha256 FROM source").fetchone()[0] == inputs["stock"]["sha256"] == STOCK_SHA256
-    target_file = Path(__file__).with_name("targets.smi").read_bytes()
+    target_file = (Path(__file__).resolve().parents[1] / "data" / "simpretro" / "targets.smi").read_bytes()
     assert hashlib.sha256(target_file).hexdigest() == inputs["target_list_sha256"]
     assert target_file.decode("ascii").splitlines()[inputs["index"]] == inputs["upstream_smiles"]
 

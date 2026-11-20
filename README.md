@@ -1,28 +1,33 @@
-# Seed STEM 分子逆合成挑战赛
+# Seed STEM · 多步逆合成规划
 
-本项目开发**面向真实合成任务的可靠多步逆合成规划系统**。RetroChimera 根据目标结构预测单步前体，Syntheseus 搜索能够追溯到指定库存原料的路线。比赛练习还需核查关键反应的化学证据。
+给定一个目标分子的 SMILES，RetroChimera 预测单步反应前体，Syntheseus 用蒙特卡洛树搜索（MCTS）寻找能追溯到库存原料的完整路线。本仓库使用作者公开的模型、权重和搜索器，提供本地 CPU 实验入口、库存查询实现和搜索图复核代码。[RetroChimera 论文](https://www.nature.com/articles/s41586-026-11160-9) · [模型代码](https://github.com/microsoft/retrochimera) · [搜索框架](https://github.com/microsoft/syntheseus)
 
-## 仓库导航
+## 当前实验
 
-| 想做什么 | 从哪里开始 |
+已在 SimpRetro 原始 172 道题中运行第 1 题。使用 23,081,629 项 eMolecules 库存，在本机 CPU 上搜索 30 分钟，共生成 43,086 个节点。50 个首步候选中有 2 个得到后续展开，限时内未找到完整路线。论文图 4a 使用 V100 评测整个题集。[实验设置与分时结果](docs/fig4a.md) · [机器可读结果](results/fig4a/target-000/result.json)
+
+## 运行与复核
+
+首次使用时，按[环境安装、权重下载和库存建库步骤](docs/fig4a.md#复跑)准备运行环境。以下命令从仓库根目录在 Linux 或 WSL 中执行。复核已有结果只需安装依赖、准备库存索引，然后运行第二条命令。
+
+```bash
+PYTHONHASHSEED=0 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 PYTHONUNBUFFERED=1 \
+  .runtime-linux/venv/bin/python scripts/run_target.py --index 0 \
+  --stock .runtime-linux/fig4a-stock.sqlite --out results/fig4a/target-000-repeat
+
+.runtime-linux/venv/bin/python scripts/audit_run.py results/fig4a/target-000 \
+  --stock .runtime-linux/fig4a-stock.sqlite
+```
+
+## 仓库结构
+
+| 目录 | 内容 |
 | --- | --- |
-| 查看或复跑论文图 4a 的第 1 题 | [单题复现](reproduction/fig4a/README.md)包含 CPU 环境入口、原始目标与库存来源、30 分钟 MCTS 配置和复跑命令。[运行结果](reproduction/fig4a/runs/target-000/result.json)与[搜索图复核](reproduction/fig4a/runs/target-000/audit.json)可直接查看。 |
-| 查模型部署成本 | [部署调研](docs/model-deployment.md)汇总 RetroChimera、Solvent 和 DianShi 的公开权重体积及环境要求。 |
-| 整理比赛方案 | 用[通用单题工作稿](practice/route-template.md)记录目标、候选路线、反应先例、选择性与风险。[结构绘制工具](tools/draw_structure.py)可把 SMILES 画回结构图，供人工核对。 |
+| [scripts/](scripts/) | 建立库存索引、运行单题搜索、复核搜索图、从 SMILES 绘制结构图 |
+| [configs/](configs/) | 图 4a 实验的模型、搜索策略和预算 |
+| [data/](data/simpretro/) | SimpRetro 原始目标清单，保留作者的顺序与文件校验值 |
+| [environment/](environment/) | CPU 环境依赖和本机安装的包版本 |
+| [results/](results/fig4a/target-000/) | 已完成实验的原始输入、结果、搜索图、日志、资源统计和复核报告 |
+| [docs/](docs/) | 单题复现说明、[部署成本调研](docs/model-deployment.md)、[比赛安排](docs/competition.md)和[通用单题工作稿](docs/route-template.md) |
 
-当前正式基准跑了原始 172 道题中的第 1 题。使用 23,081,629 项库存，在本机 CPU 上搜索 30 分钟，生成 43,086 个节点，未找到完整路线。50 个首步候选中只有 2 个得到后续展开。[实验设置、分时结果与局限](reproduction/fig4a/README.md)
-
-## 比赛准备
-
-赛题从目标分子结构图开始，要求在火山方舟设计完整逆合成路线。2026 年 12 月 4 日中午 12:00 截止报名，12 月 7 日公布题目及提交要求，12 月 10 日提交方案。专家初筛之后，独立 CRO 会对入选方案做湿实验。[赛事通知](https://seed.bytedance.com/zh/blog/seed-stem-计划-分子逆合成挑战赛启动?view_from=homepage_tab) · [报名入口](https://bytedance.larkoffice.com/share/base/form/shrcnPuqeyluTnYwI7SnjBqL4Be)
-
-## 出题前安排
-
-| 时段 | 要解决的问题 | 可检查的产物 |
-| --- | --- | --- |
-| 11 月 19–23 日 | 强基线能否找到完整路线，运行一次要多少资源？ | 在 [SimpRetro 原始目标](reproduction/fig4a/README.md)上运行 RetroChimera + Syntheseus，记录库存、预算、搜索图和用时 |
-| 11 月 24–27 日 | 关键前体是否出现、是否展开、叶节点为何未闭合、闭合路线的关键步有何依据？ | 针对具体节点回查单步候选、搜索图、库存和文献，保留替代路线及无法判定的案例 |
-| 11 月 28 日–12 月 3 日 | 哪个干预能解决已观察到的问题？ | 按归因选择先例检索、路线评分或失败节点重搜。冻结目标、库存和预算，逐项消融，只保留有可重复收益的模块 |
-| 12 月 4–6 日 | 三天能否完成十道高难题的搜索、证据核查和方案整理？ | 用未参与调参的十道题限时演练，逐题记录首条候选时间、人工核查用时、可交付方案及未解决风险 |
-
-以上是内部训练安排。12 月 7 日按正式要求调整工作稿和交付格式。
+本地权重、完整库存及其 SQLite 索引保存在 Git 忽略的 `.runtime-linux/` 目录中。

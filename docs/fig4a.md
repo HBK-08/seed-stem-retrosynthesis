@@ -4,7 +4,7 @@
 
 ## 第 1 题实测结果
 
-**30 分钟内未找到所有叶节点均在库的路线。** 目标分子式为 C53H51Cl2FN6O9S，含 72 个重原子，本身不在库存。单步模型完成了 33 个未命中缓存的分子预测。搜索器展开 544 个节点，最终图包含 43,086 个节点，对应 11,507 种不同的分子集合。独立读取保存的图，逐边检查反应与状态变化，并对图中 1,217 个不同分子重查原料库，所得五档判定与运行器一致。[输入](runs/target-000/input.json) · [原始结果](runs/target-000/result.json) · [搜索图](runs/target-000/graph.pkl) · [独立复核结果](runs/target-000/audit.json)
+**30 分钟内未找到所有叶节点均在库的路线。** 目标分子式为 C53H51Cl2FN6O9S，含 72 个重原子，本身不在库存。单步模型完成了 33 个未命中缓存的分子预测。搜索器展开 544 个节点，最终图包含 43,086 个节点，对应 11,507 种不同的分子集合。独立读取保存的图，逐边检查反应与状态变化，并对图中 1,217 个不同分子重查原料库，所得五档判定与运行器一致。[输入](../results/fig4a/target-000/input.json) · [原始结果](../results/fig4a/target-000/result.json) · [搜索图](../results/fig4a/target-000/graph.pkl) · [独立复核结果](../results/fig4a/target-000/audit.json)
 
 | 搜索时间 | 图中节点 | 最深逆推步数 | 已出现后续反应的首步分支 | 完整路线 |
 | ---: | ---: | ---: | ---: | --- |
@@ -14,9 +14,9 @@
 | 10 分钟 | 2,751 | 11 | 1 | 未找到 |
 | 30 分钟 | 43,086 | 19 | 2 | 未找到 |
 
-根节点产生了 50 个首步候选，只有两个得到继续展开。排名第一的候选把目标的羧酸逆推为叔丁酯，保留整个大环骨架。它的搜索策略分数为 0.941，其下有 41,135 个后续节点，占整棵树的 95.5%。这给出一个具体的失败现象：在这次 CPU 预算下，搜索集中在一个末步脱保护假设上。该步是否合理、另外 48 条首步候选中是否存在可闭合路线，以及调整探索强度能否改善结果，都需要独立检验。[根节点反应与分支计数](runs/target-000/audit.json)
+根节点产生了 50 个首步候选，只有两个得到继续展开。排名第一的候选把目标的羧酸逆推为叔丁酯，保留整个大环骨架。它的搜索策略分数为 0.941，其下有 41,135 个后续节点，占整棵树的 95.5%。这给出一个具体的失败现象：在这次 CPU 预算下，搜索集中在一个末步脱保护假设上。该步是否合理、另外 48 条首步候选中是否存在可闭合路线，以及调整探索强度能否改善结果，都需要独立检验。[根节点反应与分支计数](../results/fig4a/target-000/audit.json)
 
-模型与规划器初始化 95.66 秒，搜索 1,800.69 秒。含启动、导入依赖及写出结果，整个进程耗时 33 分 00 秒。GNU time 记录的最大常驻内存为 6.60 GiB，该值按进程统计。[运行日志](runs/target-000/search.log) · [资源记录](runs/target-000/resources.txt)
+模型与规划器初始化 95.66 秒，搜索 1,800.69 秒。含启动、导入依赖及写出结果，整个进程耗时 33 分 00 秒。GNU time 记录的最大常驻内存为 6.60 GiB，该值按进程统计。[运行日志](../results/fig4a/target-000/search.log) · [资源记录](../results/fig4a/target-000/resources.txt)
 
 ## 实验设置
 
@@ -24,7 +24,7 @@
 | --- | --- |
 | 目标与库存 | 输入作者清单中第 1 个 SMILES。eMolecules 原文件共 23,081,629 行，去掉每行两端空白后仍有 23,081,629 个不同字符串。使用 SQLite 做精确成员查询，以便 CPU 机器同时容纳模型与库存。与作者配置一致，导入库存时不再做分子规范化。[原始库存下载说明](https://github.com/catalystforyou/SimpRetro/tree/5abbdd12d23bec3b0c524a3f5e59d160beac00f3) |
 | 单步预测 | RetroChimera 1.3.0，公开 Pistachio 权重，包含模板定位与 R-SMILES2。每次最多请求 50 组前体，模板应用参数 `r_app=1`。图 4a 的单步候选直接进入搜索。[模型与权重](https://github.com/microsoft/retrochimera) · [论文 Methods](https://www.nature.com/articles/s41586-026-11160-9) |
-| 多步规划 | 按 SimpRetro 公开入口采用 MolSetMCTS。每个节点代表一组当前待合成或已在库的分子，每条边代表一次逆合成断开。最大展开深度 20，使用模型概率引导选枝，PUCB 探索系数 1，初始价值 0.5。作者仓库按单步模型列出过部分调参值，公开配置未列出 RetroChimera。本次使用明确记录的默认参数与种子 0。[原始启动脚本](https://github.com/catalystforyou/SimpRetro/blob/5abbdd12d23bec3b0c524a3f5e59d160beac00f3/run_search.sh) · [上游调参表](https://github.com/catalystforyou/SimpRetro/blob/5abbdd12d23bec3b0c524a3f5e59d160beac00f3/syntheseus/cli/search_config.yml) · [本地配置](search.yml) |
+| 多步规划 | 按 SimpRetro 公开入口采用 MolSetMCTS。每个节点代表一组当前待合成或已在库的分子，每条边代表一次逆合成断开。最大展开深度 20，使用模型概率引导选枝，PUCB 探索系数 1，初始价值 0.5。作者仓库按单步模型列出过部分调参值，公开配置未列出 RetroChimera。本次使用明确记录的默认参数与种子 0。[原始启动脚本](https://github.com/catalystforyou/SimpRetro/blob/5abbdd12d23bec3b0c524a3f5e59d160beac00f3/run_search.sh) · [上游调参表](https://github.com/catalystforyou/SimpRetro/blob/5abbdd12d23bec3b0c524a3f5e59d160beac00f3/syntheseus/cli/search_config.yml) · [本地配置](../configs/fig4a.yml) |
 | 时间与判分 | 模型加载另行计时。每个时间点检查是否已到达一个所有分子均在库存的状态。首解后继续搜索。搜索器在迭代之间检查时限，故进程实际用时可超过 1,800 秒。判定 30 分钟是否求解时，只计入 1,800 秒内出现的解。 |
 | 硬件与软件 | 本机使用 Intel Core Ultra 5 125H、WSL Ubuntu 22.04、CPU PyTorch 和 Syntheseus 0.9.0。图 4a 的 GPU 为 V100，SimpRetro 原仓库带有自己的 Syntheseus 代码。本机的时间档结果只用于描述这一台机器上的这一题。 |
 
@@ -32,13 +32,13 @@
 
 ## 复跑
 
-从项目根目录在 Linux 或 WSL 的 Bash 中运行。首次安装需要 Python 3.10 和 uv。本机使用 CPU 版 PyTorch 2.2.2、RetroChimera 1.3.0 和 Syntheseus 0.9.0。[CPU 依赖](requirements-cpu.txt) · [本地环境包版本记录](packages-cpu.txt)
+从项目根目录在 Linux 或 WSL 的 Bash 中运行。首次安装需要 Python 3.10 和 uv。本机使用 CPU 版 PyTorch 2.2.2、RetroChimera 1.3.0 和 Syntheseus 0.9.0。[CPU 依赖](../environment/requirements-cpu.txt) · [本地环境包版本记录](../environment/packages-cpu.txt)
 
 ```bash
 mkdir -p .runtime-linux
 uv venv --python python3.10 .runtime-linux/venv
 uv pip install --python .runtime-linux/venv/bin/python torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cpu
-uv pip install --python .runtime-linux/venv/bin/python -r reproduction/fig4a/requirements-cpu.txt --find-links https://data.pyg.org/whl/torch-2.2.0+cpu.html
+uv pip install --python .runtime-linux/venv/bin/python -r environment/requirements-cpu.txt --find-links https://data.pyg.org/whl/torch-2.2.0+cpu.html
 ```
 
 从[官方 Figshare 文件](https://api.figshare.com/v2/file/download/59468882)下载 Pistachio 权重，核验后解压到配置中的模型目录。
@@ -52,10 +52,10 @@ echo 'b0d30506d780693b293991cf2e5c5ac0be773748ccddbcd46684de5696d8a60f  .runtime
 
 ```bash
 curl -fL 'https://drive.usercontent.google.com/download?id=1x33LmAizIdA5Dgw7IJp7_k7gRdNVv5cT&export=download&confirm=t' -o .runtime-linux/emolecules.txt
-.runtime-linux/venv/bin/python reproduction/fig4a/prepare_stock.py .runtime-linux/emolecules.txt .runtime-linux/fig4a-stock.sqlite
+.runtime-linux/venv/bin/python scripts/prepare_stock.py .runtime-linux/emolecules.txt .runtime-linux/fig4a-stock.sqlite
 PYTHONHASHSEED=0 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 PYTHONUNBUFFERED=1 \
-  .runtime-linux/venv/bin/python reproduction/fig4a/run_target.py \
-  --stock .runtime-linux/fig4a-stock.sqlite --index 0 --out reproduction/fig4a/runs/target-000-repeat
+  .runtime-linux/venv/bin/python scripts/run_target.py \
+  --stock .runtime-linux/fig4a-stock.sqlite --index 0 --out results/fig4a/target-000-repeat
 ```
 
 每次复跑指定一个新的输出目录。目录内的 `input.json` 保存实际目标、库存校验值、依赖版本和搜索配置。`graph.pkl` 保存原始搜索图。`result.json` 保存五个时间点的求解状态、模型调用数、搜索图节点数和根节点断键。若有解，文件还给出最早闭合路线的反应序列和库存叶节点。路线闭合仅核实库存条件，反应可行性还需另行查证。
@@ -63,5 +63,5 @@ PYTHONHASHSEED=0 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 PYTHONUNBUFFERED=1 \
 可用保存的图独立复核。下列命令逐个分子重查库存，逐边核对反应前后的状态，按节点创建时间重建五档结果。若有解，还会从库存原料正向重放首条路线。该步骤无需加载权重。
 
 ```bash
-.runtime-linux/venv/bin/python reproduction/fig4a/audit_run.py reproduction/fig4a/runs/target-000 --stock .runtime-linux/fig4a-stock.sqlite
+.runtime-linux/venv/bin/python scripts/audit_run.py results/fig4a/target-000 --stock .runtime-linux/fig4a-stock.sqlite
 ```
