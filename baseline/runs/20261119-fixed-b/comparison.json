@@ -1,0 +1,36 @@
+{
+  "first": "20261119-fixed-a",
+  "second": "20261119-fixed-b",
+  "targets": [
+    {
+      "target": "CC(=O)Oc1ccccc1C(=O)O",
+      "same_root_proposals_and_scores_in_order": true,
+      "same_tree_labels_scores_expansions_and_creation_calls": false,
+      "common_model_calls": 2,
+      "same_generated_nodes_edges_scores_through_common_calls": true,
+      "node_counts": [
+        20,
+        104
+      ],
+      "model_calls": [
+        2,
+        12
+      ]
+    },
+    {
+      "target": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+      "same_root_proposals_and_scores_in_order": true,
+      "same_tree_labels_scores_expansions_and_creation_calls": false,
+      "common_model_calls": 4,
+      "same_generated_nodes_edges_scores_through_common_calls": true,
+      "node_counts": [
+        44,
+        126
+      ],
+      "model_calls": [
+        4,
+        12
+      ]
+    }
+  ]
+}

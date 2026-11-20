@@ -1,0 +1,36 @@
+{
+  "first": "20261119-cpu",
+  "second": "20261119-cpu-repeat",
+  "targets": [
+    {
+      "target": "CC(=O)Oc1ccccc1C(=O)O",
+      "same_root_proposals_and_scores_in_order": true,
+      "same_tree_labels_scores_expansions_and_creation_calls": false,
+      "common_model_calls": 12,
+      "same_generated_nodes_edges_scores_through_common_calls": false,
+      "node_counts": [
+        113,
+        115
+      ],
+      "model_calls": [
+        12,
+        12
+      ]
+    },
+    {
+      "target": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+      "same_root_proposals_and_scores_in_order": true,
+      "same_tree_labels_scores_expansions_and_creation_calls": false,
+      "common_model_calls": 12,
+      "same_generated_nodes_edges_scores_through_common_calls": false,
+      "node_counts": [
+        164,
+        128
+      ],
+      "model_calls": [
+        12,
+        12
+      ]
+    }
+  ]
+}

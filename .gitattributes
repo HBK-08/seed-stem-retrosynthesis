@@ -1,0 +1,4 @@
+baseline/*.smi text eol=lf
+baseline/search.yml text eol=lf
+*.pkl binary
+*.png binary

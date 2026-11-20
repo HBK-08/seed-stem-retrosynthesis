@@ -1,0 +1,16 @@
+model_class: RetroChimera
+model_kwargs:
+  template_localization:
+    num_processes: 2
+search_algorithm: retro_star
+search_targets_file: baseline/targets.smi
+inventory_smiles_file: baseline/stock.smi
+canonicalize_inventory: true
+num_top_results: 5
+limit_reaction_model_calls: 12
+time_limit_s: 180
+stop_on_first_solution: false
+save_graph: true
+num_routes_to_plot: 0
+results_dir: baseline/runs
+append_timestamp_to_dir: false
