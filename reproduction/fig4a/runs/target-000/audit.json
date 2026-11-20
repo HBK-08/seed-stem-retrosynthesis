@@ -1,0 +1,59 @@
+{
+  "distinct_molecules_checked_against_stock": 1217,
+  "distinct_molecule_sets": 11507,
+  "root_children_in_final_graph": 50,
+  "cutoffs": [
+    {
+      "minute": 1,
+      "solved": false,
+      "nodes": 51,
+      "max_depth": 1,
+      "root_children_with_descendants": 0
+    },
+    {
+      "minute": 2,
+      "solved": false,
+      "nodes": 101,
+      "max_depth": 2,
+      "root_children_with_descendants": 1
+    },
+    {
+      "minute": 5,
+      "solved": false,
+      "nodes": 1001,
+      "max_depth": 7,
+      "root_children_with_descendants": 1
+    },
+    {
+      "minute": 10,
+      "solved": false,
+      "nodes": 2751,
+      "max_depth": 11,
+      "root_children_with_descendants": 1
+    },
+    {
+      "minute": 30,
+      "solved": false,
+      "nodes": 43086,
+      "max_depth": 19,
+      "root_children_with_descendants": 2
+    }
+  ],
+  "expanded_root_children": [
+    {
+      "position_in_graph": 1,
+      "reaction": "Cc1c(Cl)c2c(Cl)c(C)c1-c1c(-c3ccc(F)cc3)sc3ncnc(c13)O[C@@H](C(=O)OC(C)(C)C)Cc1cc(ccc1OCc1ccnc(-c3ccc(OC[C@H]4COCCO4)cc3)n1)OC[C@@H](CN1CCN(C)CC1)O2>>Cc1c(Cl)c2c(Cl)c(C)c1-c1c(-c3ccc(F)cc3)sc3ncnc(c13)O[C@@H](C(=O)O)Cc1cc(ccc1OCc1ccnc(-c3ccc(OC[C@H]4COCCO4)cc3)n1)OC[C@@H](CN1CCN(C)CC1)O2",
+      "policy_score": 0.9411198934513839,
+      "descendants": 41135
+    },
+    {
+      "position_in_graph": 2,
+      "reaction": "Cc1c(Cl)c2c(Cl)c(C)c1-c1c(-c3ccc(F)cc3)sc3nc(C(C)(C)C)nc(c13)O[C@@H](C(=O)O)Cc1cc(ccc1OCc1ccnc(-c3ccc(OC[C@H]4COCCO4)cc3)n1)OC[C@@H](CN1CCN(C)CC1)O2>>Cc1c(Cl)c2c(Cl)c(C)c1-c1c(-c3ccc(F)cc3)sc3ncnc(c13)O[C@@H](C(=O)O)Cc1cc(ccc1OCc1ccnc(-c3ccc(OC[C@H]4COCCO4)cc3)n1)OC[C@@H](CN1CCN(C)CC1)O2",
+      "policy_score": 0.03850555226474164,
+      "descendants": 1900
+    }
+  ],
+  "all_nodes_including_overrun": 43086,
+  "max_depth_including_overrun": 19,
+  "expanded_nodes_including_overrun": 544
+}

@@ -1,0 +1,24 @@
+model_class: RetroChimera
+model_dir: .runtime-linux/pistachio
+use_gpu: false
+model_kwargs:
+  template_localization:
+    num_templates_per_result: 1
+    num_processes: 2
+search_algorithm: mcts
+mcts_config:
+  max_expansion_depth: 20
+  bound_constant: 1.0
+  bound_function_class: pucb_bound
+  value_function_class: ConstantNodeEvaluator
+  value_function_kwargs: {constant: 0.5}
+  reward_function_class: HasSolutionValueFunction
+  policy_class: ReactionModelProbPolicy
+num_top_results: 50
+reaction_model_use_cache: true
+time_limit_s: 1800
+limit_iterations: 1000000
+limit_reaction_model_calls: 1000000
+prevent_repeat_mol_in_trees: true
+stop_on_first_solution: false
+canonicalize_inventory: false

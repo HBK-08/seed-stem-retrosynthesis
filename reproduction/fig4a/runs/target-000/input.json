@@ -1,0 +1,103 @@
+{
+  "index": 0,
+  "upstream_smiles": "Cc1c(Cl)c2c(Cl)c(C)c1-c1c(-c3ccc(F)cc3)sc3ncnc(c13)O[C@@H](C(=O)O)Cc1cc(ccc1OCc1ccnc(-c3ccc(OC[C@H]4COCCO4)cc3)n1)OC[C@@H](CN1CCN(C)CC1)O2",
+  "canonical_smiles": "Cc1c(Cl)c2c(Cl)c(C)c1-c1c(-c3ccc(F)cc3)sc3ncnc(c13)O[C@@H](C(=O)O)Cc1cc(ccc1OCc1ccnc(-c3ccc(OC[C@H]4COCCO4)cc3)n1)OC[C@@H](CN1CCN(C)CC1)O2",
+  "target_in_stock": false,
+  "target_list_sha256": "2803ed381b5908d785333231263f78dd4ef673ed00c13dd675f01d1f07f34683",
+  "stock": {
+    "sha256": "eb0ff886bcb5d2b71f935ed1658576deb7b2ead84adeffe912ed09f33efc4815",
+    "lines": 23081629,
+    "unique_smiles": 23081629
+  },
+  "versions": {
+    "syntheseus": "0.9.0",
+    "retrochimera": "1.3.0",
+    "torch": "2.2.2+cpu",
+    "rdkit": "2023.9.6"
+  },
+  "threads_and_hash_seed": {
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "PYTHONHASHSEED": "0"
+  },
+  "random_seed": 0,
+  "config": {
+    "search_algorithm": "mcts",
+    "retro_star_config": {
+      "max_expansion_depth": 10,
+      "value_function_class": "ConstantNodeEvaluator",
+      "value_function_kwargs": {
+        "constant": 0.0
+      },
+      "and_node_cost_fn_class": "ReactionModelLogProbCost",
+      "and_node_cost_fn_kwargs": {}
+    },
+    "mcts_config": {
+      "max_expansion_depth": 20,
+      "value_function_class": "ConstantNodeEvaluator",
+      "value_function_kwargs": {
+        "constant": 0.5
+      },
+      "reward_function_class": "HasSolutionValueFunction",
+      "reward_function_kwargs": {},
+      "policy_class": "ReactionModelProbPolicy",
+      "policy_kwargs": {},
+      "bound_constant": 1.0,
+      "bound_function_class": "pucb_bound"
+    },
+    "pdvn_config": {
+      "max_expansion_depth": 10,
+      "value_function_syn_class": "ConstantNodeEvaluator",
+      "value_function_syn_kwargs": {
+        "constant": 0.5
+      },
+      "value_function_cost_class": "ConstantNodeEvaluator",
+      "value_function_cost_kwargs": {
+        "constant": 0.0
+      },
+      "and_node_cost_fn_class": "ConstantNodeEvaluator",
+      "and_node_cost_fn_kwargs": {
+        "constant": 0.1
+      },
+      "policy_class": "ReactionModelProbPolicy",
+      "policy_kwargs": {},
+      "c_dead": 5.0,
+      "bound_constant": 100.0,
+      "bound_function_class": "pucb_bound"
+    },
+    "time_limit_s": 1800.0,
+    "limit_reaction_model_calls": 1000000,
+    "limit_iterations": 1000000,
+    "limit_graph_nodes": 100000000000000000,
+    "prevent_repeat_mol_in_trees": true,
+    "stop_on_first_solution": false,
+    "expand_purchasable_target": false,
+    "search_target": "???",
+    "search_targets_file": "???",
+    "inventory_smiles_file": "???",
+    "results_dir": ".",
+    "append_timestamp_to_dir": true,
+    "use_gpu": false,
+    "canonicalize_inventory": false,
+    "remove_stereo_from_targets": false,
+    "num_top_results": 50,
+    "reaction_model_use_cache": true,
+    "save_graph": true,
+    "num_routes_to_plot": 5,
+    "forward_filter": {
+      "model_dir": "???",
+      "model_kwargs": {},
+      "model_class": "???",
+      "top_k": 5,
+      "filter_kwargs": {}
+    },
+    "model_dir": ".runtime-linux/pistachio",
+    "model_kwargs": {
+      "template_localization": {
+        "num_templates_per_result": 1,
+        "num_processes": 2
+      }
+    },
+    "model_class": "RetroChimera"
+  }
+}

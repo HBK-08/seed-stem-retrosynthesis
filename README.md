@@ -1,8 +1,20 @@
 # Seed STEM 分子逆合成挑战赛
 
-赛题从目标分子结构图开始，要求在火山方舟设计完整逆合成路线。2026 年 12 月 4 日中午 12:00 截止报名，12 月 7 日公布题目及提交要求，12 月 10 日提交方案。专家初筛之后，独立 CRO 会对入选方案做湿实验。[赛事通知](https://seed.bytedance.com/zh/blog/seed-stem-计划-分子逆合成挑战赛启动?view_from=homepage_tab) · [报名入口](https://bytedance.larkoffice.com/share/base/form/shrcnPuqeyluTnYwI7SnjBqL4Be)
+本项目开发**面向真实合成任务的可靠多步逆合成规划系统**。RetroChimera 根据目标结构预测单步前体，Syntheseus 搜索能够追溯到指定库存原料的路线。比赛练习还需核查关键反应的化学证据。
 
-## 第一次演练
+## 仓库导航
+
+| 想做什么 | 从哪里开始 |
+| --- | --- |
+| 查看或复跑论文图 4a 的第 1 题 | [单题复现](reproduction/fig4a/README.md)包含 CPU 环境入口、原始目标与库存来源、30 分钟 MCTS 配置和复跑命令。[运行结果](reproduction/fig4a/runs/target-000/result.json)与[搜索图复核](reproduction/fig4a/runs/target-000/audit.json)可直接查看。 |
+| 验证本机模型部署 | [两题开发基线](baseline/README.md)给出权重和依赖安装方法，用阿司匹林、布洛芬和 16 项库存检查 Retro* 搜索。[实测记录](baseline/RESULTS.md) |
+| 从结构图练习比赛流程 | 按[练习题面](practice/01/prompt.md)读图，用[结构绘制脚本](tools/draw_structure.py)检查转录，再用[单题工作稿](practice/route-template.md)整理路线和证据。 |
+
+当前正式基准跑了原始 172 道题中的第 1 题。使用 23,081,629 项库存，在本机 CPU 上搜索 30 分钟，生成 43,086 个节点，未找到完整路线。50 个首步候选中只有 2 个得到后续展开。[实验设置、分时结果与局限](reproduction/fig4a/README.md)
+
+## 比赛与第一次演练
+
+赛题从目标分子结构图开始，要求在火山方舟设计完整逆合成路线。2026 年 12 月 4 日中午 12:00 截止报名，12 月 7 日公布题目及提交要求，12 月 10 日提交方案。专家初筛之后，独立 CRO 会对入选方案做湿实验。[赛事通知](https://seed.bytedance.com/zh/blog/seed-stem-计划-分子逆合成挑战赛启动?view_from=homepage_tab) · [报名入口](https://bytedance.larkoffice.com/share/base/form/shrcnPuqeyluTnYwI7SnjBqL4Be)
 
 1. 打开[练习题面](practice/01/prompt.md)，把其中的目标图和问题发给方舟。在同一轮中保留模型读出的结构和首次提出的路线，便于追溯错误来自读图还是推理。
 2. 核对模型读出的 SMILES。可以用下方脚本重画结构，逐处比较支链、取代位置和立体标记。读错结构时保留原回答，纠正后再生成一次路线。
@@ -17,11 +29,9 @@
 python tools/draw_structure.py "CC(O)c1ccccc1" preview.png
 ```
 
-## 项目定位与出题前安排
+## 出题前安排
 
-本项目开发**面向真实合成任务的可靠多步逆合成规划系统**。先用 RetroChimera 预测单步前体、用 Syntheseus 搜索到指定原料的路线，再逐步核查关键反应的化学证据。上面的方舟读图练习保留作端到端对照。单独测试规划器时直接输入已核对的目标 SMILES，以便定位误差。
-
-11 月 19 日已在本机 CPU 跑通 Pistachio 权重和 Retro*。阿司匹林首轮展开得到文献路线，布洛芬在 12 次调用内未闭合。[两题实测结果与失败节点](baseline/RESULTS.md)
+方舟读图练习用作端到端对照。单独测试规划器时直接输入已核对的目标 SMILES，以便定位误差。11 月 19 日的本地开发测试中，阿司匹林首轮展开得到文献路线，布洛芬在 12 次调用内未闭合。[两题实测结果与失败节点](baseline/RESULTS.md)
 
 | 时段 | 要解决的问题 | 可检查的产物 |
 | --- | --- | --- |
